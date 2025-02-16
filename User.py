@@ -1,6 +1,6 @@
 from pydantic import BaseModel, EmailStr
-import random
 from typing import List, Optional
+
 
 class User(BaseModel):
     id: int
@@ -13,7 +13,7 @@ class House(BaseModel):
     id: int
     name: str
     owner_id: int
-    owner_name = str
+    owner_name: str
     address: str
 
 
@@ -112,6 +112,7 @@ def updateRoom(room_id: int,
             room.name = name
         return True
     return False
+
 
 # devices
 def createDevice(device: Device):
