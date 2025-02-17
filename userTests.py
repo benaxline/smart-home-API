@@ -3,16 +3,25 @@ from User import House, User, Room, Device
 
 
 def test_CreateHouse():
+    houses = []
     house = House(id=1, 
                   name="My House",
                   address="48 Brighton Ave",
                   owner_id=12,
                   owner_name="John")
+    house2 = House(id=2, 
+                  name="John's House",
+                  address="1056 Commonwealth Ave",
+                  owner_id=9,
+                  owner_name="John")
+    houses.append(house)
+    houses.append(house2)
     assert house.id == 1
     assert house.name == "My House"
     assert house.address == "48 Brighton Ave"
     assert house.owner_id == 12
     assert house.owner_name == "John"
+    assert len(houses) == 2
 
 
 def test_createUser():
@@ -46,4 +55,5 @@ def test_createDevice():
     assert device.type == "google Home mini"
     assert device.room_id == 9
     assert device.status == "Active"
+
 
