@@ -3,28 +3,40 @@ from typing import List, Optional
 
 
 class User(BaseModel):
-    id: int
     name: str
     email: EmailStr
     phone: str
 
 
-class House(BaseModel):
+class UserResponse(User):
     id: int
+
+
+class House(BaseModel):
     name: str
     owner_id: int
     owner_name: str
     address: str
 
 
-class Room(BaseModel):
+class HouseResponse(House):
     id: int
+
+
+class Room(BaseModel):
     name: str
     house_id: int
 
 
-class Device(BaseModel):
+class RoomResponse(Room):
     id: int
+
+
+class Device(BaseModel):
     type: str
     room_id: int
     status: str
+
+
+class DeviceResponse(Device):
+    id: int

@@ -1,5 +1,5 @@
 import pytest
-from apiObjects import House, User, Room, Device
+from main import House, User, Room, Device
 
 
 def test_CreateHouse():

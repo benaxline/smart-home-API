@@ -1,8 +1,8 @@
-from model import House, Room, Device, User
 from typing import List, Optional
-from fastapi import FastAPI, HTTPException
-
-
+from fastapi import FastAPI, HTTPException, Depends
+from database import getDBConnection
+import sqlite3
+import schemas
 
 app = FastAPI()
 
@@ -11,32 +11,44 @@ room_db: List[Room] = []
 device_db: List[Device] = []
 user_db: List[User] = []
 
+# users
+@app.post("/users/", response_model=schemas.UserResponse, status_code=201)
+def createUser(user: schemas.User):
+    connection = getDBConnection()
+    cursor = connection.cursor()
+    cursor.execute("INSERT INTO users (name, email, phone) VALUES (?, ?, ?)",
+                   (user.name, user.email, user.phone))
+    connection.commit()
+    user_id = cursor.lastrowid
+    connection.close()
+    return {**user.model_dump(), "id": user_id}
 
-# house
-@app.post("/houses/", response_model=House)
-def createHouse(house: House):
+
+# houses
+@app.post("/houses/", response_model=schemas.HouseResponse, status_code=201)
+def createHouse(house: schemas.House):
     house_db.append(house)
     return house
 
 @app.get("/houses/", response_model=List[House])
 def getAllHouses():
-    return {"Houses" : house_db}
+    return house_db
 
 
 @app.get("/houses/{house_id}", response_model=House)
-def findHouseByID(house_id: int):
+def getHouseByID(house_id: int):
     for house in house_db:
         if house.id == house_id:
             return house
     raise HTTPException(status_code=404, detail=f"House with {house_id} not found")
 
 
-@app.delete("/houses/{house_id}", response_model=House)
+@app.delete("/houses/{house_id}", response_model=House, status_code=204)
 def deleteHouse(house_id: int):
     for house in house_db:
         if house.id == house_id:
             house_db.remove(house)
-            return True
+            return
     raise HTTPException(status_code=404, detail="House not found")
  
 
